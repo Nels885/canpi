@@ -4,20 +4,22 @@ from canbus import data_print
 from canbus.config import Channel
 from constances import CAN_CFG
 
-sem = CAN_CFG.get("SEM")
-ID_DIAG = sem.get("ID_DIAG")
-ID_REPLY = sem.get("ID_REPLY")
 BITRATE_125 = 125000
 BITRATE_250 = 250000
 BITRATE_500 = 500000
 
+sem = CAN_CFG.get("SEM")
+ID_DIAG = sem.get("ID_DIAG")
+ID_REPLY = sem.get("ID_REPLY")
+app_soft = sem.get('ApplicationSoftwareIdentificationDataIdentifier')
+data_ext = sem.get("DataExtended")
 
 def main(timeout = 50):
     id, data, multiline  = 0x00, bytearray(), False
     data_zero = 0x21
 
     bus = can.Bus(channel='can0', interface='socketcan')# socketcan
-    msg = can.Message(arbitration_id=ID_DIAG, data=[0x03, 0x22, 0xF1, 0x81], is_extended_id=True)
+    msg = can.Message(arbitration_id=ID_DIAG, data=app_soft, is_extended_id=True)
     bus.send(msg)
 
     while timeout != 0:
@@ -25,7 +27,7 @@ def main(timeout = 50):
         if msg_recv and msg_recv.arbitration_id == ID_REPLY:
             if msg_recv.data[0] == 0x10:
                 data.extend(msg_recv.data[1:])
-                msg = can.Message(arbitration_id=ID_DIAG, data=sem.get("DataExtended"), is_extended_id=True)
+                msg = can.Message(arbitration_id=ID_DIAG, data=data_ext, is_extended_id=True)
                 bus.send(msg)
                 multiline = True
             elif msg_recv.data[0] == data_zero:
