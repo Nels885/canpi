@@ -1,16 +1,17 @@
-import os
 import time
 import can
 from binascii import hexlify
 
+from canbus import data_print
+from canbus.config import Channel
 from constances import CAN_CFG
 
 sem_cfg = CAN_CFG.get("SEM")
 ID_DIAG = sem_cfg.get("ID_DIAG")
 ID_REPLY = sem_cfg.get("ID_REPLY")
-BITRATE_125 = "125000"
-BITRATE_250 = "250000"
-BITRATE_500 = "500000"
+BITRATE_125 = 125000
+BITRATE_250 = 250000
+BITRATE_500 = 500000
 
 msg_identifier=[0x03, 0x22, 0xF1, 0x81]
 
@@ -20,7 +21,7 @@ def main():
 
     while True:
         msg = bus.recv()
-        print(f"ID: {hex(msg.arbitration_id)} - data: {' '.join([hex(a) for a in msg.data])}")
+        data_print(msg)
 
         if msg.arbitration_id == ID_DIAG and msg.data == bytearray(msg_identifier):
             print("OK => ApplicationSoftwareIdentificationDataIdentifer")
@@ -37,10 +38,9 @@ def main():
 
 if __name__ == '__main__':
     try:
-        os.system(f'sudo ip link set can1 type can bitrate {BITRATE_500}')
-        os.system('sudo ifconfig can1 up')
+        channel = Channel(name="can1", bitrate=BITRATE_500)
         main()
     except KeyboardInterrupt:
         print("\r\nInterruption de l'utilisateur")
     finally:
-        os.system('sudo ifconfig can1 down')
+        channel.stop()

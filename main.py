@@ -1,24 +1,15 @@
-from ast import While
-import os
-from threading import TIMEOUT_MAX
-from typing import final
 import can
 
+from canbus import data_print
+from canbus.config import Channel
 from constances import CAN_CFG
 
 sem = CAN_CFG.get("SEM")
 ID_DIAG = sem.get("ID_DIAG")
 ID_REPLY = sem.get("ID_REPLY")
-BITRATE_125 = "125000"
-BITRATE_250 = "250000"
-BITRATE_500 = "500000"
-
-
-def data_print(msg):
-    try:
-        print(f"ID: 0x{msg.arbitration_id:02X} - data: {' '.join([f'{a:02X}' for a in msg.data])}")
-    except AttributeError:
-        pass
+BITRATE_125 = 125000
+BITRATE_250 = 250000
+BITRATE_500 = 500000
 
 
 def main(timeout = 50):
@@ -52,10 +43,9 @@ def main(timeout = 50):
 
 if __name__ == '__main__':
     try:
-        os.system(f'sudo ip link set can0 type can bitrate {BITRATE_500}')
-        os.system('sudo ifconfig can0 up')
+        channel = Channel(name='can0', bitrate=BITRATE_500)
         main()
     except KeyboardInterrupt:
         print("Interruption de l'utilisateur")
     finally:
-        os.system('sudo ifconfig can0 down')
+        channel.stop()
