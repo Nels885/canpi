@@ -3,6 +3,10 @@ from sys import int_info
 
 
 class Channel:
+    """
+    Configuration channels of 2-Channel Isolated CAN Expansion HAT for Raspberry Pi.
+    Brand url : https://www.waveshare.com/2-ch-can-hat.htm
+    """
 
     def __init__(self, *args, **kwargs):
         self.name = kwargs.get("name", "can0")
@@ -17,6 +21,12 @@ class Channel:
         os.system(f'sudo ifconfig {self.name} down')
 
     def set_bitrate(self, bitrate: int) -> bool:
+        """Modifying the channel bitrate
+        Args:
+            bitrate (int): New bitrate value
+        Returns: 
+            bool: True if the value has been changed
+        """
         if isinstance(bitrate, int):
             self.stop()
             self.bitrate = bitrate
@@ -25,6 +35,12 @@ class Channel:
         return False
 
     def set_name(self, name: str) -> bool:
+        """Modifying the channel name
+        Args:
+            name (str): Selected channel name
+        Returns:
+            bool: True if the value has been changed
+        """
         if isinstance(name, str):
             self.stop()
             self.name = name
