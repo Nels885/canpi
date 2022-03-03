@@ -19,8 +19,8 @@ vin = sem.get('VehicleIdentificationNumber')
 vehicle_manu = sem.get('VehicleManufacturerECUHardwareNumberDataIdentifier')
 
 
-def main():
-    can1 = CanBus(channel='can1')
+def main(channel):
+    can1 = CanBus(channel=channel.name)
 
     while True:
         msg = can1.recv()
@@ -71,7 +71,7 @@ def main():
 if __name__ == '__main__':
     try:
         channel = Channel(name="can1", bitrate=BITRATE_500)
-        main()
+        main(channel)
     except KeyboardInterrupt:
         print("\r\nInterruption de l'utilisateur")
     finally:
