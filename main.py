@@ -10,10 +10,13 @@ def main(timeout = 50):
     sem = Sem(channel='can0')
 
     print("## Lecture des informations Software SEM ##")
-    sem.set_software(timeout)
+    sem.get_software(timeout)
 
-    print("\r\n## Lecture du V.I.N. SEM ##")
-    sem.set_vin(timeout)
+    print("\r\n## Lecture du V.I.N. SEM ##")
+    sem.get_vin(timeout)
+
+    print("\r\n## Lecture du harware ECU fabriquant SEM ##")
+    sem.get_ecu_hw_brand(timeout)
 
 if __name__ == '__main__':
     try:

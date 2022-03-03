@@ -16,6 +16,7 @@ app_soft = sem.get('ApplicationSoftwareIdentificationDataIdentifier')
 app_data = sem.get('ApplicationDataIdentificationDataIdentifier')
 com_diag = sem.get('CommonDiagnosticsDataRecord61828')
 vin = sem.get('VehicleIdentificationNumber')
+vehicle_manu = sem.get('VehicleManufacturerECUHardwareNumberDataIdentifier')
 
 
 def main():
@@ -47,11 +48,22 @@ def main():
                 can1.send_messages(ID_REPLY, msg_list, True)
             
             elif msg.data == bytearray(vin):
-                print("OK =>VehicleIdentificationNumber")
+                print("OK => VehicleIdentificationNumber")
                 msg_list = [
                     [0x10, 0x14, 0x62, 0xF1, 0x90, 0x56, 0x46, 0x33],
                     [0x21, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20],
                     [0x22, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20],
+                ]
+                can1.send_messages(ID_REPLY, msg_list, True)
+
+            elif msg.data == bytearray(vehicle_manu):
+                print("OK => VehicleManufacturerECUHardwareNumberDataIdentifier")
+                msg_list = [
+                    [0x10, 0x1D, 0x62, 0xF1, 0x91, 0x54, 0x45, 0x41],
+                    [0x21, 0x32, 0x2B, 0x01, 0x01, 0x32, 0x33, 0x30],
+                    [0x22, 0x39, 0x30, 0x31, 0x31, 0x36, 0x50, 0x30],
+                    [0x23, 0x31, 0x30, 0x30, 0x31, 0x30, 0x31, 0x35],
+                    [0x24, 0x39, 0x33, 0x00, 0x00, 0x00, 0x00, 0x00]
                 ]
                 can1.send_messages(ID_REPLY, msg_list, True)
 
