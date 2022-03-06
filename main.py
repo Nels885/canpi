@@ -8,6 +8,7 @@ BITRATE_500 = 500000
 
 def main(channel, timeout = 50):
     sem = Sem(channel=channel.name)
+    # sem = Sem(channel="can0")
 
     print("## Lecture des informations Software SEM ##")
     sem.get_software(timeout)
@@ -21,7 +22,7 @@ def main(channel, timeout = 50):
 if __name__ == '__main__':
     try:
         channel = Channel(name='can0', bitrate=BITRATE_500)
-        main(channel)
+        main(channel=channel)
     except KeyboardInterrupt:
         print("Interruption de l'utilisateur")
     finally:
