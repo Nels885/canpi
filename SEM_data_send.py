@@ -34,7 +34,7 @@ def main(channel):
                     [0x21, 0x32, 0x36, 0x36, 0x39, 0x34, 0x37, 0x36],
                     [0x22, 0x43, 0x30, 0x31, 0x00, 0x00, 0x00, 0x00]
                 ]
-                can1.send_messages(ID_REPLY, msg_list, True)
+                can1.send_messages(ID_REPLY, msg_list)
 
             elif msg.data == bytearray(app_data):
                 print("OK => ApplicationDataIdentificationDataIdentifier")
@@ -45,7 +45,7 @@ def main(channel):
                     [0x23, 0x33, 0x37, 0x33, 0x39, 0x31, 0x50, 0x30],
                     [0x24, 0x31, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00] 
                 ]
-                can1.send_messages(ID_REPLY, msg_list, True)
+                can1.send_messages(ID_REPLY, msg_list)
             
             elif msg.data == bytearray(vin):
                 print("OK => VehicleIdentificationNumber")
@@ -54,7 +54,7 @@ def main(channel):
                     [0x21, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20],
                     [0x22, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20],
                 ]
-                can1.send_messages(ID_REPLY, msg_list, True)
+                can1.send_messages(ID_REPLY, msg_list)
 
             elif msg.data == bytearray(vehicle_manu):
                 print("OK => VehicleManufacturerECUHardwareNumberDataIdentifier")
@@ -65,7 +65,7 @@ def main(channel):
                     [0x23, 0x31, 0x30, 0x30, 0x31, 0x30, 0x31, 0x35],
                     [0x24, 0x39, 0x33, 0x00, 0x00, 0x00, 0x00, 0x00]
                 ]
-                can1.send_messages(ID_REPLY, msg_list, True)
+                can1.send_messages(ID_REPLY, msg_list)
 
 
 if __name__ == '__main__':

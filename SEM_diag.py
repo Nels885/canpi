@@ -25,5 +25,5 @@ if __name__ == '__main__':
         main(channel=channel)
     except KeyboardInterrupt:
         print("Interruption de l'utilisateur")
-    finally:
-        channel.stop()
+    # finally:
+    #     channel.stop()
