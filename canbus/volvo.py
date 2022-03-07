@@ -16,26 +16,30 @@ class Sem(CanBus):
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
+        self.debug = kwargs.get("debug", False)
 
     def get_software(self, timeout: int):
-        self.send_messages(self.ID_DIAG, self.APP_SOFT, True)
+        self.send_messages(self.ID_DIAG, self.APP_SOFT)
         data = self._get_data(timeout, self.APP_SOFT)
 
-        print(f"data: {' '.join([f'{a:02X}' for a in data])}")
+        if self.debug:
+            print(f"data: {' '.join([f'{a:02X}' for a in data])}")
         print(f"Software: {data[6:].decode()}")
 
-    def get_vin(self, timeout):
-        self.send_messages(self.ID_DIAG, self.VIN, True)
+    def get_vin(self, timeout: int):
+        self.send_messages(self.ID_DIAG, self.VIN)
         data = self._get_data(timeout, self.VIN)
 
-        print(f"data: {' '.join([f'{a:02X}' for a in data])}")
+        if self.debug:
+            print(f"data: {' '.join([f'{a:02X}' for a in data])}")
         print(f"vin: {data[4:].decode()}")
     
-    def get_ecu_hw_brand(self, timeout):
-        self.send_messages(self.ID_DIAG, self.HW_MANU, True)
+    def get_ecu_hw_brand(self, timeout: int):
+        self.send_messages(self.ID_DIAG, self.HW_MANU)
         data = self._get_data(timeout, self.HW_MANU)
 
-        print(f"data: {' '.join([f'{a:02X}' for a in data])}")
+        if self.debug:
+            print(f"data: {' '.join([f'{a:02X}' for a in data])}")
         print(f"ECU HW Brand: {data[4:].decode()}")
     
     def _get_data(self, timeout, msg_send):
@@ -47,7 +51,7 @@ class Sem(CanBus):
                     multiline = ceil((int(msg_recv.data[1]) + 1) / 7) - 1
                     print(multiline)
                     data.extend(msg_recv.data[1:])
-                    self.send_messages(self.ID_DIAG, self.DATA_EXT, True)
+                    self.send_messages(self.ID_DIAG, self.DATA_EXT)
                 elif msg_recv.data[0] == data_zero:
                     data.extend(msg_recv.data[1:])
                     data_zero += 1
