@@ -1,9 +1,11 @@
 import re
+import time
 import requests
 
 from canbus.config import Channel
 from canbus.volvo import Sem
 from usb_scanner import Reader
+from usb_scanner.exceptions import DeviceException
 from constances import CAN_CFG, URL, TOKEN
 
 BITRATE_125 = 125000
@@ -13,11 +15,15 @@ BITRATE_500 = 500000
 
 def barcode_check(scan, regex):
     while True:
-        barcode = scan.read()
-        if re.match(regex, str(barcode)):
-            print(f"\rbarcode: {barcode}   ")
-            break
-        print("\rMauvais code barre !!!", end="")
+        try:
+            barcode = scan.read()
+            if re.match(regex, str(barcode)):
+                print(f"\rbarcode: {barcode}   ")
+                break
+            print("\rMauvais code barre !!!", end="")
+        except DeviceException:
+            print("\r** USB scanner not found **", end="")
+            time.sleep(5)
     return barcode
 
 def barcode_scan(scan):
