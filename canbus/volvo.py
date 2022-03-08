@@ -24,7 +24,7 @@ class Sem(CanBus):
 
         if self.debug:
             print(f"data: {' '.join([f'{a:02X}' for a in data])}")
-        print(f"Software: {data[6:].decode()}")
+        return data[6:].decode()
 
     def get_vin(self, timeout: int):
         self.send_messages(self.ID_DIAG, self.VIN)
@@ -32,7 +32,7 @@ class Sem(CanBus):
 
         if self.debug:
             print(f"data: {' '.join([f'{a:02X}' for a in data])}")
-        print(f"vin: {data[4:].decode()}")
+        return data[4:].decode().strip()
     
     def get_ecu_hw_brand(self, timeout: int):
         self.send_messages(self.ID_DIAG, self.HW_MANU)
@@ -40,16 +40,15 @@ class Sem(CanBus):
 
         if self.debug:
             print(f"data: {' '.join([f'{a:02X}' for a in data])}")
-        print(f"ECU HW Brand: {data[4:].decode()}")
+        return data[4:].decode()
     
     def _get_data(self, timeout, msg_send):
         data_zero, data, multiline  = 0x21, bytearray(), -1
-        while timeout != 0 and multiline != 0:
+        while timeout > 0 and multiline != 0:
             msg_recv = self.recv(0.1)
             if msg_recv and msg_recv.arbitration_id == self.ID_REPLY:
                 if msg_recv.data[0] == 0x10 and msg_recv.data[3] == msg_send[2] and msg_recv.data[4] == msg_send[3]:
-                    multiline = ceil((int(msg_recv.data[1]) + 1) / 7) - 1
-                    print(multiline)
+                    multiline = ceil((int(msg_recv.data[1]) + 1) / (msg_recv.dlc - 1)) - 1
                     data.extend(msg_recv.data[1:])
                     self.send_messages(self.ID_DIAG, self.DATA_EXT)
                 elif msg_recv.data[0] == data_zero:
@@ -58,6 +57,8 @@ class Sem(CanBus):
                     multiline -= 1
                 elif multiline == -1 and msg_recv.dlc != 0:
                     data =  msg_recv.data
-                self.data_print(msg_recv)
+                    timeout = 0
+                if self.debug:
+                    self.data_print(msg_recv)
             timeout -= 1
         return data
