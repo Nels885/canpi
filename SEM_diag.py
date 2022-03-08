@@ -11,13 +11,16 @@ def main(channel, timeout = 50):
     # sem = Sem(channel="can0")
 
     print("## Lecture des informations Software SEM ##")
-    sem.get_software(timeout)
+    soft = sem.get_software(timeout)
+    print(f"Software: {soft}")
 
     print("\r\n## Lecture du V.I.N. SEM ##")
-    sem.get_vin(timeout)
+    vin = sem.get_vin(timeout)
+    print(f"vin: {vin}")
 
     print("\r\n## Lecture du hardware ECU fabriquant SEM ##")
-    sem.get_ecu_hw_brand(timeout)
+    hw = sem.get_ecu_hw_brand(timeout)
+    print(f"ECU HW Brand: {hw}")
 
 if __name__ == '__main__':
     try:

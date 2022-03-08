@@ -13,6 +13,7 @@ pyusb = "*"
 python-can = "*"
 usb-scanner = {version = "*", index = "testpypi"}
 flake8 = "*"
+requests = "*"
 
 [dev-packages]
 
