@@ -12,6 +12,10 @@ class Cvm(CanBus):
     OPEN_SESSION = CVM.get("SessionOpen")
     DTC_NB = CVM.get("ReportNumberOfDTCByStatusMask")
     DTC_LIST = CVM.get("ReportDTCbyStatusMask")
+    DTC_CLEAR = CVM.get("ClearDTC")
+    IDENT_SYS = CVM.get("ReadDataByIdentificationSystem")
+    ZONE_SYS = CVM.get("ReadDataByZoneIdentification")
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
@@ -41,8 +45,33 @@ class Cvm(CanBus):
             print(f"data: {' '.join([f'{a:02X}' for a in data])}")
         print(f"DTC number: {data[-1]:02X}")
         return data
+    
+    def set_clear_dtc(self, timeout: int):
+        self.send_messages(self.ID_DIAG, self.OPEN_SESSION)
+        self._get_data(timeout)
+        self.send_messages(self.ID_DIAG, self.DTC_CLEAR)
+        data = self._get_data(timeout)
 
-  
+        if self.debug:
+            print(f"data: {' '.join([f'{a:02X}' for a in data])}")
+        return data
+
+    def get_identify_system(self, timeout: int):
+        self.send_messages(self.ID_DIAG, self.IDENT_SYS)
+        data = self._get_data(timeout)
+
+        if self.debug:
+            print(f"data: {' '.join([f'{a:02X}' for a in data])}")
+        return data
+    
+    def get_zone_identify(self, timeout: int):
+        self.send_messages(self.ID_DIAG, self.ZONE_SYS)
+        data = self._get_data(timeout)
+
+        if self.debug:
+            print(f"data: {' '.join([f'{a:02X}' for a in data])}")
+        return data
+     
     def _get_data(self, timeout):
         data_zero, data, multiline  = 0x21, bytearray(), -1
         while timeout > 0 and multiline != 0:
