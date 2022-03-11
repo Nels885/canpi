@@ -24,7 +24,7 @@ class Sem(CanBus):
 
         if self.debug:
             print(f"data: {' '.join([f'{a:02X}' for a in data])}")
-        return data[6:].decode()
+        return self._decode(data[6:])
 
     def get_vin(self, timeout: int):
         self.send_messages(self.ID_DIAG, self.VIN)
@@ -32,7 +32,7 @@ class Sem(CanBus):
 
         if self.debug:
             print(f"data: {' '.join([f'{a:02X}' for a in data])}")
-        return data[4:].decode().strip()
+        return self._decode(data[4:])
     
     def get_ecu_hw_brand(self, timeout: int):
         self.send_messages(self.ID_DIAG, self.HW_MANU)
@@ -40,7 +40,7 @@ class Sem(CanBus):
 
         if self.debug:
             print(f"data: {' '.join([f'{a:02X}' for a in data])}")
-        return data[4:].decode()
+        return self._decode(data[4:])
     
     def _get_data(self, timeout, msg_send):
         data_zero, data, multiline  = 0x21, bytearray(), -1

@@ -23,6 +23,12 @@ class CanBus:
     def recv(self, *args, **kwargs):
         return self.bus.recv(*args, **kwargs)
 
+    def _decode(self, data):
+        try:
+            return data.decode().strip()
+        except UnicodeDecodeError:
+            return None
+
     @staticmethod
     def data_print(msg):
         try:
