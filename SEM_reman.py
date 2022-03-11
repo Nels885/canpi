@@ -61,9 +61,7 @@ def api_rest(id_number, pf_code, vin):
 
 
 def main(channel, timeout = 50):
-    sem = Sem(channel=channel.name)
     scan = Reader()
-    # sem = Sem(channel="can0")
 
     while True:
         print("\r\n===================================")
@@ -71,6 +69,8 @@ def main(channel, timeout = 50):
         print("===================================")
         
         id_number, pf_code = barcode_scan(scan)
+
+        sem = Sem(channel=channel.name)
 
         print("## Lecture des informations Software SEM ##")
         soft = sem.get_software(timeout)
