@@ -14,6 +14,7 @@ python-can = "*"
 usb-scanner = {version = "*", index = "testpypi"}
 flake8 = "*"
 requests = "*"
+flask = "*"
 
 [dev-packages]
 
