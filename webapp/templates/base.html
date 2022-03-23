@@ -43,7 +43,7 @@
                     <li><a href="#"><i class="material-icons">import_export</i></a></li>
                     <li><a href="#"><i class="material-icons">build</i></a></li>
                     <li><a href="#"><i class="material-icons">add</i></a></li> #}
-                    <li><a href="#"><i class="fa-solid fa-plus"></i></a></li>
+                    <li><a href="{{ url_for('create_fmux') }}"><i class="fa-solid fa-plus"></i></a></li>
                     <li><a href="#"><i class="fa-solid fa-gear"></i></a></li>
                     <li><a href="#modalRestart" class="modal-trigger"><i class="fa-solid fa-rotate-right"></i></a></li>
                     <li><a href="#modalStop" class="modal-trigger"><i class="fa-solid fa-power-off"></i></a></li>
@@ -53,7 +53,7 @@
         </nav>
 
         <ul class="sidenav" id="mobile-links">
-          <li><a href="#"><i class="fa-solid fa-plus"></i>Add</a></li>
+          <li><a href="{{ url_for('create_fmux') }}"><i class="fa-solid fa-plus"></i>Add</a></li>
           <li><a hreg="#"><i class="fa-solid fa-gear"></i>Setting</a></li>
           <li><a href="#modalRestart" class="modal-trigger"><i class="fa-solid fa-rotate-right"></i>Restart</a></li>
           <li><a href="#modalStop" class="modal-trigger"><i class="fa-solid fa-power-off"></i>Stop</a></li>
